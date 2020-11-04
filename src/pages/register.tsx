@@ -8,8 +8,8 @@ import { useMutation } from 'urql';
 interface registerProps {}
 
 const Register: React.FC<registerProps> = () => {
-  const [_, register] = useMutation(`
-  mutation($username: String!, $password: String!) {
+  const [, register] = useMutation(`
+  mutation Register($username: String!, $password: String!) {
   register(userIputs: { username: $username, password: $password }) {
     errors {
       field
@@ -27,8 +27,8 @@ const Register: React.FC<registerProps> = () => {
       <Formik
         initialValues={{ username: '', password: '' }}
         onSubmit={async values => {
-          const response = register(values);
-          console.log(typeod)
+          // const response = register(values);
+          return register(values);
         }}>
         {({ isSubmitting }) => (
           <Form>
