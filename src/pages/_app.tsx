@@ -1,4 +1,4 @@
-import { ColorModeProvider, CSSReset } from '@chakra-ui/core';
+import { CSSReset } from '@chakra-ui/core';
 import { ThemeProvider } from 'emotion-theming';
 import { Provider, createClient } from 'urql';
 import theme from '../theme';
@@ -8,14 +8,12 @@ const client = createClient({
   fetchOptions: { credentials: 'include' }
 });
 
-function MyApp({ Component, pageProps }) {
+function MyApp({ Component, pageProps }: any) {
   return (
     <Provider value={client}>
       <ThemeProvider theme={theme}>
-        <ColorModeProvider>
-          <CSSReset />
-          <Component {...pageProps} />
-        </ColorModeProvider>
+        <CSSReset />
+        <Component {...pageProps} />
       </ThemeProvider>
     </Provider>
   );
