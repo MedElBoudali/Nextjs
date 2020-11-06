@@ -1,8 +1,7 @@
+import { Nav } from './Navbar';
+
 const Navbar: React.FC<{}> = () => {
-
-    return (<div>This is navbar Component/Page</div>);
-
-}
-
+  return <Nav>This is navbar Component/Page</Nav>;
+};
 
 export default Navbar;
