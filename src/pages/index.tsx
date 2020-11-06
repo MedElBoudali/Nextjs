@@ -1,9 +1,10 @@
 import Navbar from '../components/layouts/Navbar';
 
 const Index = () => (
-  <div>
+  <>
     <Navbar />
-  </div>
+    <div>Index page</div>
+  </>
 );
 
 export default Index;
