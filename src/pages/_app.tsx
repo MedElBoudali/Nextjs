@@ -1,7 +1,4 @@
-import { CSSReset } from '@chakra-ui/core';
-import { ThemeProvider } from 'emotion-theming';
 import { Provider, createClient } from 'urql';
-import theme from '../theme';
 
 const client = createClient({
   url: 'http://localhost:4000/graphql',
@@ -11,10 +8,7 @@ const client = createClient({
 function MyApp({ Component, pageProps }: any) {
   return (
     <Provider value={client}>
-      <ThemeProvider theme={theme}>
-        <CSSReset />
-        <Component {...pageProps} />
-      </ThemeProvider>
+      <Component {...pageProps} />
     </Provider>
   );
 }
