@@ -8,8 +8,8 @@ const Navbar: React.FC<{}> = () => {
   const [{ data, fetching }] = useMeQuery();
 
   let body = null;
-  if (fetching) {
-    // loading and not login
+  if (fetching) {s
+    // loading and not loged in
   } else if (!data?.me) {
     // if we are not loged in
     body = (
