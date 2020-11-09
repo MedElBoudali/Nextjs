@@ -3,7 +3,13 @@ import { Cache, cacheExchange, query, QueryInput } from '@urql/exchange-graphcac
 import { ThemeProvider } from 'emotion-theming';
 import theme from '../theme';
 import { CSSReset } from '@chakra-ui/core';
-import { LoginMutation, MeDocument, MeQuery, RegisterMutation } from '../generated/graphql';
+import {
+  LoginMutation,
+  LogoutMutation,
+  MeDocument,
+  MeQuery,
+  RegisterMutation
+} from '../generated/graphql';
 
 const betterupdateQuery = <Result, Query>(
   cache: Cache,
@@ -48,6 +54,14 @@ const client = createClient({
                   return { me: result.register.user };
                 }
               }
+            );
+          },
+          logout: (_result, args, cache, info) => {
+            betterupdateQuery<LogoutMutation, MeQuery>(
+              cache,
+              { query: MeDocument },
+              _result,
+              () => ({ me: null })
             );
           }
         }

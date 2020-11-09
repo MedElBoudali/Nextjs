@@ -2,13 +2,14 @@ import { Fragment } from 'react';
 // import { Nav, LogoContainer, Logo, LogoHeader, ButtonsContainer } from './NavbarStyle';
 import NextLink from 'next/link';
 import { Box, Button, Flex, Link } from '@chakra-ui/core';
-import { useMeQuery } from '../../generated/graphql';
+import { useLogoutMutation, useMeQuery } from '../../generated/graphql';
 
 const Navbar: React.FC<{}> = () => {
   const [{ data, fetching }] = useMeQuery();
+  const [{ fetching: logoutFetching }, logout] = useLogoutMutation();
 
   let body = null;
-  if (fetching) {s
+  if (fetching) {
     // loading and not loged in
   } else if (!data?.me) {
     // if we are not loged in
@@ -31,7 +32,12 @@ const Navbar: React.FC<{}> = () => {
     body = (
       <Flex>
         <Box color='white'>{data?.me?.username}</Box>
-        <Button ml={5} variant='link' color='#68D391'>
+        <Button
+          ml={5}
+          variant='link'
+          color='#68D391'
+          onClick={() => logout()}
+          isLoading={logoutFetching}>
           Logout
         </Button>
       </Flex>
