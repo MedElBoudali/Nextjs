@@ -18,7 +18,7 @@ const Login: React.FC<{}> = () => {
       <Navbar />
       <Wrapper variant='small'>
         <Formik
-          initialValues={{ username: '', password: '' }}
+          initialValues={{ userNameOrEmail: '', password: '' }}
           onSubmit={async (values, { setErrors }) => {
             // send values (usernam, password) to our login mutation
             const response = await login(values);
@@ -33,7 +33,11 @@ const Login: React.FC<{}> = () => {
           {({ isSubmitting }) => (
             <Form>
               <Box>
-                <InputField name='username' placeholder='username' label='Username' />
+                <InputField
+                  name='userNameOrEmail'
+                  placeholder='example / name@example.com'
+                  label='Username / Email'
+                />
               </Box>
               <Box mt='30px'>
                 <InputField
