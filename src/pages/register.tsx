@@ -5,7 +5,8 @@ import { Formik, Form } from 'formik';
 import { useRouter } from 'next/router';
 import { useRegisterMutation } from '../generated/graphql';
 import { toErrorMap } from '../utils/toErrorMap';
-import PropTypes from 'prop-types';
+import { createUrqlClient } from '../utils/createUrqlClient';
+import { withUrqlClient } from 'next-urql';
 
 interface registerProps {}
 
@@ -47,6 +48,4 @@ const Register: React.FC<registerProps> = () => {
   );
 };
 
-Register.propTypes = {};
-
-export default Register;
+export default withUrqlClient(createUrqlClient)(Register);
