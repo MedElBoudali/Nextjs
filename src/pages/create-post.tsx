@@ -12,7 +12,7 @@ import { createUrqlClient } from '../utils/createUrqlClient';
 import { toErrorMap } from '../utils/toErrorMap';
 
 const CreatePost: React.FC = () => {
-  useIsAuth();
+  useIsAuth(); // custom hook to verifie if authenticated or not
   const router = useRouter();
   const [, createPost] = useCreatePostMutation();
   const [authError, setAuthError] = useState(false);
