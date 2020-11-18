@@ -7,10 +7,12 @@ import InputField from '../components/InputField';
 import Navbar from '../components/layouts/Navbar';
 import Wrapper from '../components/Wrapper';
 import { FieldError, useCreatePostMutation } from '../generated/graphql';
+import { useIsAuth } from '../hooks/useIsAuth';
 import { createUrqlClient } from '../utils/createUrqlClient';
 import { toErrorMap } from '../utils/toErrorMap';
 
 const CreatePost: React.FC = () => {
+  useIsAuth();
   const router = useRouter();
   const [, createPost] = useCreatePostMutation();
   const [authError, setAuthError] = useState(false);
@@ -43,7 +45,7 @@ const CreatePost: React.FC = () => {
                 <InputField name='text' placeholder='Some text here' label='Body' />
               </Box>
               {authError && (
-                <Box style={{color: 'red'}}>
+                <Box style={{ color: 'red' }}>
                   <p>please log in before creating posts.</p>
                 </Box>
               )}
