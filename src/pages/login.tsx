@@ -27,8 +27,12 @@ const Login: React.FC<{}> = () => {
               // check if we have errors
               setErrors(toErrorMap(response.data.login.errors));
             } else if (response.data?.login.user) {
-              // worked
-              router.push('/');
+              // check if we have redirection
+              if (typeof router.query.redirection === 'undefined') {
+                router.push('/');
+              } else {
+                router.push(router.query.redirection as string);
+              }
             }
           }}>
           {({ isSubmitting }) => (

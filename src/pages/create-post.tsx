@@ -27,6 +27,7 @@ const CreatePost: React.FC = () => {
             const response = await createPost(values);
             if (response.data?.createPost.error) {
               // check if we have errors
+              // check if we are auth
               if (response.data.createPost.error.field === 'authenticated') {
                 setAuthError(true);
               }
