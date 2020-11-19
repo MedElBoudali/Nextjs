@@ -10,8 +10,6 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  /** The javascript `Date` as string. Type represents date and time as the ISO Date string. */
-  DateTime: any;
 };
 
 export type Query = {
@@ -19,6 +17,12 @@ export type Query = {
   getAllPosts: Array<Post>;
   getPost?: Maybe<Post>;
   me?: Maybe<User>;
+};
+
+
+export type QueryGetAllPostsArgs = {
+  cursor?: Maybe<Scalars['String']>;
+  limit: Scalars['Int'];
 };
 
 
@@ -33,18 +37,17 @@ export type Post = {
   text: Scalars['String'];
   points: Scalars['Float'];
   authorId: Scalars['Float'];
-  createdAt: Scalars['DateTime'];
-  updatedAt: Scalars['DateTime'];
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
 };
-
 
 export type User = {
   __typename?: 'User';
   id: Scalars['Float'];
   username: Scalars['String'];
   email: Scalars['String'];
-  createdAt: Scalars['DateTime'];
-  updatedAt: Scalars['DateTime'];
+  createdAt: Scalars['String'];
+  updatedAt: Scalars['String'];
 };
 
 export type Mutation = {
@@ -261,14 +264,17 @@ export type MeQuery = (
   )> }
 );
 
-export type GetAllPostsQueryVariables = Exact<{ [key: string]: never; }>;
+export type GetAllPostsQueryVariables = Exact<{
+  limit: Scalars['Int'];
+  cursor?: Maybe<Scalars['String']>;
+}>;
 
 
 export type GetAllPostsQuery = (
   { __typename?: 'Query' }
   & { getAllPosts: Array<(
     { __typename?: 'Post' }
-    & Pick<Post, 'id' | 'title' | 'createdAt' | 'updatedAt'>
+    & Pick<Post, 'id' | 'title' | 'authorId' | 'createdAt' | 'updatedAt' | 'points' | 'text'>
   )> }
 );
 
@@ -393,12 +399,15 @@ export function useMeQuery(options: Omit<Urql.UseQueryArgs<MeQueryVariables>, 'q
   return Urql.useQuery<MeQuery>({ query: MeDocument, ...options });
 };
 export const GetAllPostsDocument = gql`
-    query GetAllPosts {
-  getAllPosts {
+    query GetAllPosts($limit: Int!, $cursor: String) {
+  getAllPosts(limit: $limit, cursor: $cursor) {
     id
     title
+    authorId
     createdAt
     updatedAt
+    points
+    text
   }
 }
     `;

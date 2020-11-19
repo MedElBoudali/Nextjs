@@ -6,16 +6,27 @@ import { Link } from '@chakra-ui/core';
 import NextLink from 'next/link';
 
 const Index = () => {
-  const [{ data }] = useGetAllPostsQuery();
+  const [{ data }] = useGetAllPostsQuery({
+    variables: {
+      limit: 10
+    }
+  });
   return (
     <>
       <Navbar />
-      <div>Index page</div>
       <NextLink href='/create-post'>
         <Link>Create Post</Link>
       </NextLink>
 
-      {data && data.getAllPosts.map(p => <div key={p.id}>{p.title}</div>)}
+      {data &&
+        data.getAllPosts.map(p => (
+          <div style={{ margin: '5px 50px' }} key={p.id}>
+            <p>Title: {p.title}</p>
+            <p>Text: {p.text}</p>
+            <p>Points: {p.points}</p>
+            <p>Author: {p.authorId}</p>
+          </div>
+        ))}
     </>
   );
 };
