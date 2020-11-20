@@ -2,13 +2,14 @@ import Navbar from '../components/layouts/Navbar';
 import { withUrqlClient } from 'next-urql';
 import { createUrqlClient } from '../utils/createUrqlClient';
 import { useGetAllPostsQuery } from '../generated/graphql';
-import { Link } from '@chakra-ui/core';
+import { Box, Heading, Link, Text } from '@chakra-ui/core';
 import NextLink from 'next/link';
+import { Stack } from '@chakra-ui/core';
 
 const Index = () => {
   const [{ data }] = useGetAllPostsQuery({
     variables: {
-      limit: 10
+      limit: 9
     }
   });
   return (
@@ -17,16 +18,19 @@ const Index = () => {
       <NextLink href='/create-post'>
         <Link>Create Post</Link>
       </NextLink>
-
-      {data &&
-        data.getAllPosts.map(p => (
-          <div style={{ margin: '5px 50px' }} key={p.id}>
-            <p>Title: {p.title}</p>
-            <p>Text: {p.text}</p>
-            <p>Points: {p.points}</p>
-            <p>Author: {p.authorId}</p>
-          </div>
-        ))}
+      <Stack spacing='24px' m={10}>
+        {data &&
+          data.getAllPosts.map(p => (
+            <Box p={5} shadow='md' borderWidth='1px' key={p.id}>
+              <Heading fontSize='xl'>{p.title}</Heading>
+              <Text mt={4} style={{ textAlign: 'justify' }}>
+                {p.textSnippet}
+              </Text>
+              <Text mt={4}>Likes: {p.points}</Text>
+              <Text mt={4}>Author ID: {p.authorId}</Text>
+            </Box>
+          ))}
+      </Stack>
     </>
   );
 };

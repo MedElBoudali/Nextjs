@@ -7,5 +7,6 @@ query GetAllPosts($limit: Int!, $cursor: String) {
     updatedAt
     points
     text
+    textSnippet
   }
 }
