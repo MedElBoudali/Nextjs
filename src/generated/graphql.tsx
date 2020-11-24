@@ -156,6 +156,15 @@ export type UserInputs = {
   password: Scalars['String'];
 };
 
+export type PostSnippetFragment = (
+  { __typename?: 'Post' }
+  & Pick<Post, 'id' | 'title' | 'text' | 'points' | 'authorId' | 'createdAt' | 'updatedAt' | 'textSnippet'>
+  & { author: (
+    { __typename?: 'User' }
+    & Pick<User, 'id' | 'username' | 'email' | 'createdAt' | 'updatedAt'>
+  ) }
+);
+
 export type RegularErrorFragment = (
   { __typename?: 'FieldError' }
   & Pick<FieldError, 'field' | 'message'>
@@ -312,6 +321,25 @@ export type GetAllPostsQuery = (
   ) }
 );
 
+export const PostSnippetFragmentDoc = gql`
+    fragment postSnippet on Post {
+  id
+  title
+  text
+  points
+  authorId
+  author {
+    id
+    username
+    email
+    createdAt
+    updatedAt
+  }
+  createdAt
+  updatedAt
+  textSnippet
+}
+    `;
 export const RegularErrorFragmentDoc = gql`
     fragment regularError on FieldError {
   field

@@ -1,8 +1,8 @@
 import Navbar from '../components/layouts/Navbar';
 import { withUrqlClient } from 'next-urql';
 import { createUrqlClient } from '../utils/createUrqlClient';
-import { useGetAllPostsQuery, useVoteMutation } from '../generated/graphql';
-import { Box, Button, Flex, Heading, IconButton, Link, Text } from '@chakra-ui/core';
+import { useGetAllPostsQuery } from '../generated/graphql';
+import { Box, Button, Flex, Heading, Link, Text } from '@chakra-ui/core';
 import NextLink from 'next/link';
 import { Stack } from '@chakra-ui/core';
 import { useState } from 'react';
@@ -13,13 +13,6 @@ const Index = () => {
   const [{ data, fetching }] = useGetAllPostsQuery({
     variables
   });
-  const [_, voteMutation] = useVoteMutation();
-  const vote = (value: number, postId: number) => {
-    voteMutation({
-      value,
-      postId
-    });
-  };
 
   // handling if we don't have any data
   if (!data && !fetching) {
@@ -44,7 +37,7 @@ const Index = () => {
         {data?.getAllPosts.posts && !fetching ? (
           data.getAllPosts.posts.map(p => (
             <Flex p={5} shadow='md' borderWidth='1px' key={p.id}>
-              <VoteButtons post={p} vote={vote} />
+              <VoteButtons post={p} />
               <Box>
                 <Heading fontSize='xl'>{p.title}</Heading>
                 <Text mt={4} style={{ textAlign: 'justify' }}>
