@@ -24,6 +24,15 @@ export const createUrqlClient = (ssrExchange: any) => ({
       },
       updates: {
         Mutation: {
+          createPost: (_result, _, cache, _2) => {
+            // cache.invalidate('Query', 'getAllPosts', {
+            //   limit: 15
+            // });
+            // the other way
+            const allFields = cache.inspectFields('Query');
+            const fieldInfos = allFields.filter(info => info.fieldName === 'getAllPosts');
+            fieldInfos.forEach(fi => cache.invalidate('Query', 'getAllPosts', fi.arguments || {}));
+          },
           login: (_result, _, cache, _2) => {
             betterupdateQuery<LoginMutation, MeQuery>(
               cache,

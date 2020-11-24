@@ -2,13 +2,13 @@ import Navbar from '../components/layouts/Navbar';
 import { withUrqlClient } from 'next-urql';
 import { createUrqlClient } from '../utils/createUrqlClient';
 import { useGetAllPostsQuery } from '../generated/graphql';
-import { Box, Button, Flex, Heading, Link, Text } from '@chakra-ui/core';
+import { Box, Button, Flex, Heading, IconButton, Link, Text } from '@chakra-ui/core';
 import NextLink from 'next/link';
 import { Stack } from '@chakra-ui/core';
 import { useState } from 'react';
 
 const Index = () => {
-  const [variables, setVariables] = useState({ limit: 10, cursor: null as null | string });
+  const [variables, setVariables] = useState({ limit: 15, cursor: null as null | string });
   const [{ data, fetching }] = useGetAllPostsQuery({
     variables
   });
@@ -35,14 +35,20 @@ const Index = () => {
       <Stack spacing='24px' m={5}>
         {data?.getAllPosts.posts && !fetching ? (
           data.getAllPosts.posts.map(p => (
-            <Box p={5} shadow='md' borderWidth='1px' key={p.id}>
-              <Heading fontSize='xl'>{p.title}</Heading>
-              <Text mt={4} style={{ textAlign: 'justify' }}>
-                {p.textSnippet}
-              </Text>
-              <Text mt={4}>Likes: {p.points}</Text>
-              <Text mt={4}>Author ID: {p.authorId}</Text>
-            </Box>
+            <Flex p={5} shadow='md' borderWidth='1px' key={p.id}>
+              <Flex direction='column' justifyContent='center' alignItems='center' mr={4}>
+                <IconButton aria-label='vote up' size='md' icon='chevron-up' />
+                {p.points}
+                <IconButton aria-label='vote down' size='md' icon='chevron-down' />
+              </Flex>
+              <Box>
+                <Heading fontSize='xl'>{p.title}</Heading>
+                <Text mt={4} style={{ textAlign: 'justify' }}>
+                  {p.textSnippet}
+                </Text>
+                <Text mt={4}>Author: {p.author.username}</Text>
+              </Box>
+            </Flex>
           ))
         ) : (
           <Flex>
