@@ -3,6 +3,7 @@ fragment postSnippet on Post {
   title
   text
   points
+  voteStatus
   authorId
   author {
     id

@@ -22,7 +22,11 @@ const VoteButtons: React.FC<VoteButtonsProps> = ({ post }) => {
         size='md'
         icon='chevron-up'
         isLoading={isLoading === 'upvoteLoading'}
+        variantColor={post.voteStatus == 1 ? 'green' : undefined}
         onClick={async () => {
+            if (post.voteStatus === 1) {
+              return;
+            }
           setIsLoading('upvoteLoading');
           await voteMutation({
             value: 1,
@@ -37,7 +41,11 @@ const VoteButtons: React.FC<VoteButtonsProps> = ({ post }) => {
         size='md'
         icon='chevron-down'
         isLoading={isLoading === 'downvoteLoading'}
+        variantColor={post.voteStatus == -1 ? 'red' : undefined}
         onClick={async () => {
+          if (post.voteStatus === -1) {
+            return;
+          }
           setIsLoading('downvoteLoading');
           await voteMutation({
             value: -1,

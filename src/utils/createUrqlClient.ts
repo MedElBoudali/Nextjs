@@ -6,9 +6,11 @@ import {
   LogoutMutation,
   MeDocument,
   MeQuery,
-  RegisterMutation
+  RegisterMutation,
+  VoteMutationVariables
 } from '../generated/graphql';
 import { cursorPagination } from './cursorPagination';
+import gql from 'graphql-tag';
 
 export const createUrqlClient = (ssrExchange: any) => ({
   url: 'http://localhost:4000/graphql',
@@ -24,10 +26,34 @@ export const createUrqlClient = (ssrExchange: any) => ({
       },
       updates: {
         Mutation: {
-          vote: (_result, _, cache, _2) => {
-            const allFields = cache.inspectFields('Query');
-            const fieldInfos = allFields.filter(info => info.fieldName === 'getAllPosts');
-            fieldInfos.forEach(fi => cache.invalidate('Query', 'getAllPosts', fi.arguments || {}));
+          vote: (_result, args, cache, _2) => {
+            const { postId, value } = args as VoteMutationVariables;
+            const data = cache.readFragment(
+              gql`
+                fragment _ on Post {
+                  id
+                  points
+                  voteStatus
+                }
+              `,
+              { id: postId } as any
+            );
+
+            if (data) {
+              if (data.voteStatus === args.value) {
+                return;
+              }
+              const newPoints = (data.points as number) + ((!args.value ? 1 : 2) * value);
+              cache.writeFragment(
+                gql`
+                  fragment __ on Post {
+                    points
+                    voteStatus
+                  }
+                `,
+                { id: postId, points: newPoints, voteStatus: value } as any
+              );
+            }
           },
           createPost: (_result, _, cache, _2) => {
             // cache.invalidate('Query', 'getAllPosts', {

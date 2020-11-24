@@ -42,6 +42,7 @@ export type Post = {
   title: Scalars['String'];
   text: Scalars['String'];
   points: Scalars['Float'];
+  voteStatus?: Maybe<Scalars['Int']>;
   authorId: Scalars['Float'];
   author: User;
   createdAt: Scalars['String'];
@@ -158,7 +159,7 @@ export type UserInputs = {
 
 export type PostSnippetFragment = (
   { __typename?: 'Post' }
-  & Pick<Post, 'id' | 'title' | 'text' | 'points' | 'authorId' | 'createdAt' | 'updatedAt' | 'textSnippet'>
+  & Pick<Post, 'id' | 'title' | 'text' | 'points' | 'voteStatus' | 'authorId' | 'createdAt' | 'updatedAt' | 'textSnippet'>
   & { author: (
     { __typename?: 'User' }
     & Pick<User, 'id' | 'username' | 'email' | 'createdAt' | 'updatedAt'>
@@ -312,11 +313,7 @@ export type GetAllPostsQuery = (
     & Pick<PaginatedPosts, 'hasMore'>
     & { posts: Array<(
       { __typename?: 'Post' }
-      & Pick<Post, 'id' | 'title' | 'text' | 'points' | 'authorId' | 'createdAt' | 'updatedAt' | 'textSnippet'>
-      & { author: (
-        { __typename?: 'User' }
-        & Pick<User, 'id' | 'username' | 'email' | 'createdAt' | 'updatedAt'>
-      ) }
+      & PostSnippetFragment
     )> }
   ) }
 );
@@ -327,6 +324,7 @@ export const PostSnippetFragmentDoc = gql`
   title
   text
   points
+  voteStatus
   authorId
   author {
     id
@@ -474,25 +472,11 @@ export const GetAllPostsDocument = gql`
   getAllPosts(limit: $limit, cursor: $cursor) {
     hasMore
     posts {
-      id
-      title
-      text
-      points
-      authorId
-      author {
-        id
-        username
-        email
-        createdAt
-        updatedAt
-      }
-      createdAt
-      updatedAt
-      textSnippet
+      ...postSnippet
     }
   }
 }
-    `;
+    ${PostSnippetFragmentDoc}`;
 
 export function useGetAllPostsQuery(options: Omit<Urql.UseQueryArgs<GetAllPostsQueryVariables>, 'query'> = {}) {
   return Urql.useQuery<GetAllPostsQuery>({ query: GetAllPostsDocument, ...options });
