@@ -1,8 +1,8 @@
 import { useRouter } from 'next/router';
 import { useGetPostQuery } from '../../generated/graphql';
-import PropTypes from 'prop-types';
 import { withUrqlClient } from 'next-urql';
 import { createUrqlClient } from '../../utils/createUrqlClient';
+import PropTypes from 'prop-types';
 
 interface CurrentPostProps {}
 
@@ -25,7 +25,13 @@ const CurrentPost: React.FC<CurrentPostProps> = props => {
         <meta name='description' content='Track the spread of the Coronavirus Covid-19 outbreak' />
       </head>
       <h1>Post id: {intId}</h1>
-      <h1>Title: {data?.getPost?.text}</h1>
+      <h1>Title: {data?.getPost?.title}</h1>
+      <h1>textSnippet: {data?.getPost?.textSnippet}</h1>
+      <h1>Post: {data?.getPost?.text}</h1>
+      <h1>Likes: {data?.getPost?.points}</h1>
+      <h1>Author: {data?.getPost?.author.username}</h1>
+      <h1>Author email: {data?.getPost?.author.email}</h1>
+      <h1>Fate: {data?.getPost?.createdAt}</h1>
     </div>
   );
 };

@@ -7,6 +7,7 @@ import NextLink from 'next/link';
 import { Stack } from '@chakra-ui/core';
 import { useState } from 'react';
 import VoteButtons from '../components/VoteButtons';
+import { useRouter } from 'next/router';
 
 const Index = () => {
   const [variables, setVariables] = useState({ limit: 15, cursor: null as null | string });
@@ -22,6 +23,13 @@ const Index = () => {
       </div>
     );
   }
+
+  const router = useRouter();
+
+  const redirecting = (id: number) => {
+    // router.push('/post/' + id);
+    window.open('/post/' + id, '_ blank');
+  };
 
   return (
     <>
@@ -39,7 +47,12 @@ const Index = () => {
             <Flex p={5} shadow='md' borderWidth='1px' key={p.id}>
               <VoteButtons post={p} />
               <Box>
-                <Heading fontSize='xl'>{p.title}</Heading>
+                <Heading
+                  fontSize='xl'
+                  onClick={() => redirecting(p.id)}
+                  style={{ cursor: 'pointer', width: 'fit-content' }}>
+                  {p.title}
+                </Heading>
                 <Text mt={4} style={{ textAlign: 'justify' }}>
                   {p.textSnippet}
                 </Text>
