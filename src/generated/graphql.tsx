@@ -159,7 +159,7 @@ export type UserInputs = {
 
 export type PostSnippetFragment = (
   { __typename?: 'Post' }
-  & Pick<Post, 'id' | 'title' | 'text' | 'points' | 'voteStatus' | 'authorId' | 'createdAt' | 'updatedAt' | 'textSnippet'>
+  & Pick<Post, 'id' | 'title' | 'text' | 'points' | 'authorId' | 'voteStatus' | 'createdAt' | 'updatedAt' | 'textSnippet'>
   & { author: (
     { __typename?: 'User' }
     & Pick<User, 'id' | 'username' | 'email' | 'createdAt' | 'updatedAt'>
@@ -324,8 +324,8 @@ export const PostSnippetFragmentDoc = gql`
   title
   text
   points
-  voteStatus
   authorId
+  voteStatus
   author {
     id
     username
