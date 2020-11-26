@@ -3,6 +3,7 @@ import { useGetPostQuery } from '../../generated/graphql';
 import { withUrqlClient } from 'next-urql';
 import { createUrqlClient } from '../../utils/createUrqlClient';
 import PropTypes from 'prop-types';
+import Navbar from '../../components/layouts/Navbar';
 
 interface CurrentPostProps {}
 
@@ -24,6 +25,7 @@ const CurrentPost: React.FC<CurrentPostProps> = props => {
         <meta name='title' content='COVID-19 Tracker' />
         <meta name='description' content='Track the spread of the Coronavirus Covid-19 outbreak' />
       </head>
+      <Navbar/>
       <h1>Post id: {intId}</h1>
       <h1>Title: {data?.getPost?.title}</h1>
       <h1>textSnippet: {data?.getPost?.textSnippet}</h1>

@@ -1,7 +1,7 @@
 import { Fragment } from 'react';
 // import { Nav, LogoContainer, Logo, LogoHeader, ButtonsContainer } from './NavbarStyle';
 import NextLink from 'next/link';
-import { Box, Button, Flex, Link } from '@chakra-ui/core';
+import { Box, Button, Flex, Heading, Link } from '@chakra-ui/core';
 import { useLogoutMutation, useMeQuery } from '../../generated/graphql';
 import { isServer } from '../../utils/isServer';
 
@@ -32,7 +32,14 @@ const Navbar: React.FC<{}> = () => {
     // if we are loged in
     body = (
       <Flex>
-        <Box color='white'>{data?.me?.username}</Box>
+        <Box color='white' style={{ textTransform: 'uppercase' }}>
+          {data?.me?.username}
+        </Box>
+        <NextLink href='/create-post'>
+          <Link ml='5' color='white' paddingX={2} background='#68D391'>
+            Create Post
+          </Link>
+        </NextLink>
         <Button
           ml={5}
           variant='link'
@@ -57,7 +64,12 @@ const Navbar: React.FC<{}> = () => {
           <Link href='/register'>register</Link>
         </ButtonsContainer>
       </Nav> */}
-      <Flex bg='#008080' paddingX={10} paddingY={4}>
+      <Flex bg='#008080' paddingX={10} paddingY={4} align='center'>
+        <NextLink href='/'>
+          <Link>
+            <Heading style={{ color: 'white' }}>Reddit Clone</Heading>
+          </Link>
+        </NextLink>
         <Box ml={'auto'}>{body}</Box>
       </Flex>
     </Fragment>
