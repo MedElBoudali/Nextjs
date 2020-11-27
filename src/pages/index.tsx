@@ -11,7 +11,7 @@ import EditDeletePostBtns from '../components/EditDeletePostBtns';
 
 const Index = () => {
   const [variables, setVariables] = useState({ limit: 15, cursor: null as null | string });
-  const [{ data, fetching }] = useGetAllPostsQuery({
+  const [{ data, error, fetching }] = useGetAllPostsQuery({
     variables
   });
 
@@ -20,6 +20,7 @@ const Index = () => {
     return (
       <div>
         <p>Something Went Wrong. Try Again</p>
+        <p>Error: ${error?.message}</p>
       </div>
     );
   }
