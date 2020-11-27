@@ -4,6 +4,7 @@ import { withUrqlClient } from 'next-urql';
 import { createUrqlClient } from '../../utils/createUrqlClient';
 import Navbar from '../../components/layouts/Navbar';
 import EditDeletePostBtns from '../../components/EditDeletePostBtns';
+import { Box, Flex, Heading } from '@chakra-ui/core';
 
 const CurrentPost: React.FC<{}> = () => {
   const router = useRouter();
@@ -28,15 +29,18 @@ const CurrentPost: React.FC<{}> = () => {
             <title>{!data?.getPost ? 'Loading ...' : data.getPost.title}</title>
           </head>
           <Navbar />
-          <EditDeletePostBtns postId={intId} authorId={data.getPost.author.id} />
-          <h1>Post id: {intId}</h1>
-          <h1>Title: {data.getPost.title}</h1>
-          <h1>textSnippet: {data.getPost.textSnippet}</h1>
-          <h1>Post: {data.getPost.text}</h1>
-          <h1>Likes: {data.getPost.points}</h1>
-          <h1>Author: {data.getPost.author.username}</h1>
-          <h1>Author email: {data.getPost.author.email}</h1>
-          <h1>Fate: {data.getPost.createdAt}</h1>
+          <Box mx={200}>
+            <Heading my={10}>{data.getPost.title}</Heading>
+            <Heading fontSize='xl'>{data.getPost.text}</Heading>
+            <p style={{margin:"10px 0"}}>{data.getPost.points} Vote.</p>
+            <p style={{margin:"10px 0"}}>Created by: {data.getPost.author.username}</p>
+          </Box>
+
+          <Flex>
+            <Box m='auto'>
+              <EditDeletePostBtns postId={intId} authorId={data.getPost.author.id} />
+            </Box>
+          </Flex>
         </div>
       ) : (
         <div>Loiding ...</div>
