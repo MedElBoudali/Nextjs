@@ -1,12 +1,13 @@
 import Navbar from '../components/layouts/Navbar';
 import { withUrqlClient } from 'next-urql';
 import { createUrqlClient } from '../utils/createUrqlClient';
-import { useDeletePostMutation, useGetAllPostsQuery } from '../generated/graphql';
+import { useDeletePostMutation, useGetAllPostsQuery, useMeQuery } from '../generated/graphql';
 import { Box, Button, Flex, Heading, IconButton, Link, Text } from '@chakra-ui/core';
 import NextLink from 'next/link';
 import { Stack } from '@chakra-ui/core';
 import { useState } from 'react';
 import VoteButtons from '../components/VoteButtons';
+import EditDeletePostBtns from '../components/EditDeletePostBtns';
 
 const Index = () => {
   const [variables, setVariables] = useState({ limit: 15, cursor: null as null | string });
@@ -14,7 +15,6 @@ const Index = () => {
     variables
   });
 
-  const [, deletePost] = useDeletePostMutation();
   // handling if we don't have any data
   if (!data && !fetching) {
     return (
@@ -29,34 +29,32 @@ const Index = () => {
       <Navbar />
       <Stack spacing='24px' m={5}>
         {data?.getAllPosts.posts && !fetching ? (
-          data.getAllPosts.posts.map(p => (
-            <Flex p={5} shadow='md' borderWidth='1px' key={p.id} align='center'>
-              <VoteButtons post={p} />
-              <Flex align='center' flex={1}>
-                <Box flex={1} paddingRight={10}>
-                  <NextLink href={`/post/${encodeURIComponent(p.id)}`}>
-                    <Link>
-                      <Heading fontSize='xl' style={{ cursor: 'pointer', width: 'fit-content' }}>
-                        {p.title}
-                      </Heading>
-                    </Link>
-                  </NextLink>
-                  <Text mt={4} style={{ textAlign: 'justify' }}>
-                    {p.textSnippet}
-                  </Text>
-                  <Text mt={4}>Author: {p.author.username}</Text>
-                </Box>
-                <IconButton
-                  ml='auto'
-                  variantColor='red'
-                  aria-label='Delete Post'
-                  size='md'
-                  icon='delete'
-                  onClick={() => deletePost({id: p.id})}
-                />
+          data.getAllPosts.posts.map(p =>
+            !p ? null : (
+              <Flex p={5} shadow='md' borderWidth='1px' key={p.id} align='center'>
+                <VoteButtons post={p} />
+                <Flex align='center' flex={1}>
+                  <Box flex={1} paddingRight={10}>
+                    <NextLink href={`/post/${encodeURIComponent(p.id)}`}>
+                      <Link>
+                        <Heading fontSize='xl' style={{ cursor: 'pointer', width: 'fit-content' }}>
+                          {p.title}
+                        </Heading>
+                      </Link>
+                    </NextLink>
+                    <Text mt={4} style={{ textAlign: 'justify' }}>
+                      {p.textSnippet}
+                    </Text>
+                    <Text mt={4}>Author: {p.author.username}</Text>
+                  </Box>
+
+                  <Box ml='auto'>
+                    <EditDeletePostBtns postId={p.id} authorId={p.authorId} />
+                  </Box>
+                </Flex>
               </Flex>
-            </Flex>
-          ))
+            )
+          )
         ) : (
           <Flex>
             <Heading fontSize='l' m='auto'>
