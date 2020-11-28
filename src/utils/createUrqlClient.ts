@@ -28,7 +28,9 @@ export const createUrqlClient = (ssrExchange: any, ctx: any) => {
   };
 
   return {
-    url: 'http://localhost:4000/graphql',
+    // dev mode:
+    // url: 'http://localhost:4000/graphql',,
+    url: process.env.NEXT_PUBLIC_API_URL as string,
     fetchOptions: { credentials: 'include' as const, headers: cookie ? { cookie } : undefined },
     exchanges: [
       dedupExchange,
@@ -41,7 +43,7 @@ export const createUrqlClient = (ssrExchange: any, ctx: any) => {
         },
         updates: {
           Mutation: {
-            deletePost: (_result, args, cache, info) => {
+            deletePost: (_result, args, cache, _) => {
               cache.invalidate({
                 __typename: 'Post',
                 id: (args as DeletePostMutationVariables).id

@@ -1,7 +1,5 @@
-import { PropsWithChildren } from 'react';
-import { Box, Button, Flex, Link } from '@chakra-ui/core';
+import { Box, Button, Link } from '@chakra-ui/core';
 import { Form, Formik } from 'formik';
-import { NextPage } from 'next';
 import { withUrqlClient } from 'next-urql';
 import { useRouter } from 'next/router';
 import { useState } from 'react';

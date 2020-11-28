@@ -13,7 +13,7 @@ interface EditPostProps {}
 const EditPost: React.FC<EditPostProps> = () => {
   const router = useRouter();
   const intId = typeof router.query.id === 'string' ? parseInt(router.query.id) : -1;
-  const [{ fetching, data }] = useGetPostQuery({ variables: { id: intId } });
+  const [{ data }] = useGetPostQuery({ variables: { id: intId } });
   const [, updatePost] = useUpdatePostMutation();
 
   if (!data?.getPost) {

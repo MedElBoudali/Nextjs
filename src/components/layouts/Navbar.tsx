@@ -3,7 +3,6 @@ import { Fragment } from 'react';
 import NextLink from 'next/link';
 import { Box, Button, Flex, Heading, Link } from '@chakra-ui/core';
 import { useLogoutMutation, useMeQuery } from '../../generated/graphql';
-import { isServer } from '../../utils/isServer';
 import { useRouter } from 'next/router';
 
 const Navbar: React.FC<{}> = () => {

@@ -1,5 +1,4 @@
 import { Flex, IconButton } from '@chakra-ui/core';
-import PropTypes from 'prop-types';
 import { useState } from 'react';
 import { PostSnippetFragment, useVoteMutation } from '../generated/graphql';
 
@@ -11,7 +10,7 @@ interface VoteButtonsProps {
 }
 
 const VoteButtons: React.FC<VoteButtonsProps> = ({ post }) => {
-  const [_, voteMutation] = useVoteMutation();
+  const [, voteMutation] = useVoteMutation();
   const [isLoading, setIsLoading] = useState<'upvoteLoading' | 'downvoteLoading' | 'notLoading'>(
     'notLoading'
   );
@@ -56,10 +55,6 @@ const VoteButtons: React.FC<VoteButtonsProps> = ({ post }) => {
       />
     </Flex>
   );
-};
-
-VoteButtons.propTypes = {
-  post: PropTypes.object
 };
 
 export default VoteButtons;

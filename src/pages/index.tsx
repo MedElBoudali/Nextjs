@@ -1,8 +1,8 @@
 import Navbar from '../components/layouts/Navbar';
 import { withUrqlClient } from 'next-urql';
 import { createUrqlClient } from '../utils/createUrqlClient';
-import { useDeletePostMutation, useGetAllPostsQuery, useMeQuery } from '../generated/graphql';
-import { Box, Button, Flex, Heading, IconButton, Link, Text } from '@chakra-ui/core';
+import { useGetAllPostsQuery } from '../generated/graphql';
+import { Box, Button, Flex, Heading, Link, Text } from '@chakra-ui/core';
 import NextLink from 'next/link';
 import { Stack } from '@chakra-ui/core';
 import { useState } from 'react';
