@@ -7,12 +7,10 @@ import { useRouter } from 'next/router';
 import { useLoginMutation } from '../generated/graphql';
 import { toErrorMap } from '../utils/toErrorMap';
 import Navbar from '../components/layouts/Navbar';
-import { withUrqlClient } from 'next-urql';
-import { createUrqlClient } from '../utils/createUrqlClient';
 
 const Login: React.FC<{}> = () => {
   const router = useRouter();
-  const [, login] = useLoginMutation();
+  const [login] = useLoginMutation();
 
   return (
     <>
@@ -22,7 +20,7 @@ const Login: React.FC<{}> = () => {
           initialValues={{ userNameOrEmail: '', password: '' }}
           onSubmit={async (values, { setErrors }) => {
             // send values (usernam, password) to our login mutation
-            const response = await login(values);
+            const response = await login({ variables: values });
             if (response.data?.login.errors) {
               // check if we have errors
               setErrors(toErrorMap(response.data.login.errors));
@@ -73,4 +71,4 @@ const Login: React.FC<{}> = () => {
   );
 };
 
-export default withUrqlClient(createUrqlClient, { ssr: false })(Login);
+export default Login;

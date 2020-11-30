@@ -10,7 +10,7 @@ interface VoteButtonsProps {
 }
 
 const VoteButtons: React.FC<VoteButtonsProps> = ({ post }) => {
-  const [, voteMutation] = useVoteMutation();
+  const [voteMutation] = useVoteMutation();
   const [isLoading, setIsLoading] = useState<'upvoteLoading' | 'downvoteLoading' | 'notLoading'>(
     'notLoading'
   );
@@ -27,10 +27,7 @@ const VoteButtons: React.FC<VoteButtonsProps> = ({ post }) => {
             return;
           }
           setIsLoading('upvoteLoading');
-          await voteMutation({
-            value: 1,
-            postId: post.id
-          });
+          await voteMutation({ variables: { value: 1, postId: post.id } });
           setIsLoading('notLoading');
         }}
       />
@@ -46,10 +43,7 @@ const VoteButtons: React.FC<VoteButtonsProps> = ({ post }) => {
             return;
           }
           setIsLoading('downvoteLoading');
-          await voteMutation({
-            value: -1,
-            postId: post.id
-          });
+          await voteMutation({ variables: { value: -1, postId: post.id } });
           setIsLoading('notLoading');
         }}
       />

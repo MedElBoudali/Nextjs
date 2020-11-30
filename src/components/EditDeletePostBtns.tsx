@@ -11,8 +11,8 @@ interface EditDeletePostBtnsProps {
 
 const EditDeletePostBtns: React.FC<EditDeletePostBtnsProps> = ({ postId, authorId }) => {
   const router = useRouter();
-  const [, deletePost] = useDeletePostMutation();
-  const [{ data: meData }] = useMeQuery();
+  const [deletePost] = useDeletePostMutation();
+  const { data: meData } = useMeQuery();
 
   if (meData?.me?.id !== authorId) {
     return null;
@@ -29,7 +29,7 @@ const EditDeletePostBtns: React.FC<EditDeletePostBtnsProps> = ({ postId, authorI
         size='md'
         icon='delete'
         onClick={() => {
-          deletePost({ id: postId });
+          deletePost({ variables: { id: postId } });
           router.back();
         }}
       />

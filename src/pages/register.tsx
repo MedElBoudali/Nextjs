@@ -13,7 +13,7 @@ interface registerProps {}
 
 const Register: React.FC<registerProps> = () => {
   const router = useRouter();
-  const [, register] = useRegisterMutation();
+  const [register] = useRegisterMutation();
 
   return (
     <Wrapper variant='small'>
@@ -21,7 +21,7 @@ const Register: React.FC<registerProps> = () => {
         initialValues={{ username: '', email: '', password: '' }}
         onSubmit={async (values, { setErrors }) => {
           // send values (usernam, password) to our register mutation
-          const response = await register({ userInputs: values });
+          const response = await register({ variables: { userInputs: values } });
           if (response.data?.register.errors) {
             // check if we have errors
             setErrors(toErrorMap(response.data.register.errors));
@@ -61,4 +61,4 @@ const Register: React.FC<registerProps> = () => {
   );
 };
 
-export default withUrqlClient(createUrqlClient)(Register);
+export default Register;

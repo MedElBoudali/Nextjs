@@ -1,6 +1,4 @@
 import Navbar from '../components/layouts/Navbar';
-import { withUrqlClient } from 'next-urql';
-import { createUrqlClient } from '../utils/createUrqlClient';
 import { useGetAllPostsQuery } from '../generated/graphql';
 import { Box, Button, Flex, Heading, Link, Text } from '@chakra-ui/core';
 import NextLink from 'next/link';
@@ -11,12 +9,12 @@ import EditDeletePostBtns from '../components/EditDeletePostBtns';
 
 const Index = () => {
   const [variables, setVariables] = useState({ limit: 15, cursor: null as null | string });
-  const [{ data, error, fetching }] = useGetAllPostsQuery({
+  const { data, error, loading } = useGetAllPostsQuery({
     variables
   });
 
   // handling if we don't have any data
-  if (!data && !fetching) {
+  if (!data && !loading) {
     return (
       <div>
         <p>Something Went Wrong. Try Again</p>
@@ -29,7 +27,7 @@ const Index = () => {
     <>
       <Navbar />
       <Stack spacing='24px' m={5}>
-        {data?.getAllPosts.posts && !fetching ? (
+        {data?.getAllPosts.posts && !loading ? (
           data.getAllPosts.posts.map(p =>
             !p ? null : (
               <Flex p={5} shadow='md' borderWidth='1px' key={p.id} align='center'>
@@ -73,7 +71,7 @@ const Index = () => {
                 cursor: data.getAllPosts.posts[data.getAllPosts.posts.length - 1].createdAt
               });
             }}
-            isLoading={fetching}
+            isLoading={loading}
             m='auto'
             my={10}
             w='40%'
@@ -86,4 +84,4 @@ const Index = () => {
   );
 };
 
-export default withUrqlClient(createUrqlClient, { ssr: true })(Index);
+export default Index;

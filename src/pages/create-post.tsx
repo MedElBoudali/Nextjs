@@ -1,6 +1,5 @@
 import { Box, Button } from '@chakra-ui/core';
 import { Form, Formik } from 'formik';
-import { withUrqlClient } from 'next-urql';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 import InputField from '../components/InputField';
@@ -8,13 +7,12 @@ import Navbar from '../components/layouts/Navbar';
 import Wrapper from '../components/Wrapper';
 import { FieldError, useCreatePostMutation } from '../generated/graphql';
 import { useIsAuth } from '../hooks/useIsAuth';
-import { createUrqlClient } from '../utils/createUrqlClient';
 import { toErrorMap } from '../utils/toErrorMap';
 
 const CreatePost: React.FC = () => {
   useIsAuth(); // custom hook to verifie if authenticated or not
   const router = useRouter();
-  const [, createPost] = useCreatePostMutation();
+  const [createPost] = useCreatePostMutation();
   const [authError, setAuthError] = useState(false);
   return (
     <>
@@ -24,7 +22,9 @@ const CreatePost: React.FC = () => {
           initialValues={{ title: '', text: '' }}
           onSubmit={async (values, { setErrors }) => {
             // send values (usernam, password) to our login mutation
-            const response = await createPost(values);
+            const response = await createPost({
+              variables: values
+            });
             if (response.data?.createPost.error) {
               // check if we have errors
               // check if we are auth
@@ -61,4 +61,4 @@ const CreatePost: React.FC = () => {
   );
 };
 
-export default withUrqlClient(createUrqlClient, { ssr: false })(CreatePost);
+export default CreatePost;
