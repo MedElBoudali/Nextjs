@@ -3,24 +3,30 @@ import theme from '../theme';
 import { CSSReset } from '@chakra-ui/core';
 import { ApolloProvider } from '@apollo/client';
 import { ApolloClient, InMemoryCache, gql } from '@apollo/client';
+import { PaginatedPosts } from '../generated/graphql';
 
 const client = new ApolloClient({
   uri: process.env.NEXT_PUBLIC_API_URL as string,
   credentials: 'include',
-  cache: new InMemoryCache()
+  cache: new InMemoryCache({
+    typePolicies: {
+      Query: {
+        fields: {
+          getAllPosts: {
+            keyArgs: ['limit'],
+            merge(existing: PaginatedPosts | undefined, incoming: PaginatedPosts): PaginatedPosts {
+              return {
+                __typename: 'PaginatedPosts',
+                hasMore: existing?.hasMore as boolean,
+                posts: [...(existing?.posts || []), ...incoming.posts]
+              };
+            }
+          }
+        }
+      }
+    }
+  })
 });
-
-// client
-//   .query({
-//     query: gql`
-//       query GetRates {
-//         rates(currency: "USD") {
-//           currency
-//         }
-//       }
-//     `
-//   })
-//   .then(result => console.log(result));
 
 function MyApp({ Component, pageProps }: any) {
   return (

@@ -3,14 +3,14 @@ import { useGetAllPostsQuery } from '../generated/graphql';
 import { Box, Button, Flex, Heading, Link, Text } from '@chakra-ui/core';
 import NextLink from 'next/link';
 import { Stack } from '@chakra-ui/core';
-import { useState } from 'react';
 import VoteButtons from '../components/VoteButtons';
 import EditDeletePostBtns from '../components/EditDeletePostBtns';
 
 const Index = () => {
-  const [variables, setVariables] = useState({ limit: 15, cursor: null as null | string });
-  const { data, error, loading } = useGetAllPostsQuery({
-    variables
+  const { data, error, loading, fetchMore, variables } = useGetAllPostsQuery({
+    variables: { limit: 15, cursor: null },
+    // we can see loading if true => loading when we call fetch more
+    notifyOnNetworkStatusChange: true
   });
 
   // handling if we don't have any data
@@ -66,9 +66,31 @@ const Index = () => {
         <Flex>
           <Button
             onClick={() => {
-              setVariables({
-                limit: variables.limit,
-                cursor: data.getAllPosts.posts[data.getAllPosts.posts.length - 1].createdAt
+              fetchMore({
+                variables: {
+                  limit: variables?.limit,
+                  cursor: data.getAllPosts.posts[data.getAllPosts.posts.length - 1].createdAt
+                }
+                // the old way check _app page for the new one
+                // updateQuery: (prevValue, { fetchMoreResult }): GetAllPostsQuery => {
+                //   // this function if for load more
+                //   if (!fetchMoreResult) {
+                //     // if we didn't ask for more posts => return old posts
+                //     return prevValue as GetAllPostsQuery;
+                //   }
+                //   return {
+                //     // if we want more posts we will return posts array with old and new data
+                //     __typename: 'Query',
+                //     getAllPosts: {
+                //       __typename: 'PaginatedPosts',
+                //       hasMore: (fetchMoreResult as GetAllPostsQuery).getAllPosts.hasMore,
+                //       posts: [
+                //         ...(prevValue as GetAllPostsQuery).getAllPosts.posts,
+                //         ...(fetchMoreResult as GetAllPostsQuery).getAllPosts.posts
+                //       ]
+                //     }
+                //   };
+                // }
               });
             }}
             isLoading={loading}

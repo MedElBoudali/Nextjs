@@ -3,13 +3,13 @@ import { Fragment } from 'react';
 import NextLink from 'next/link';
 import { Box, Button, Flex, Heading, Link } from '@chakra-ui/core';
 import { useLogoutMutation, useMeQuery } from '../../generated/graphql';
-import { useRouter } from 'next/router';
 import { isServer } from '../../utils/isServer';
+import { useApolloClient } from '@apollo/client';
 
 const Navbar: React.FC<{}> = () => {
-  const router = useRouter();
   const { data, loading } = useMeQuery({ skip: isServer() });
   const [logout, { loading: logoutFetching }] = useLogoutMutation();
+  const apollo = useApolloClient();
 
   let body = null;
   if (loading) {
@@ -48,7 +48,9 @@ const Navbar: React.FC<{}> = () => {
           color='#68D391'
           onClick={async () => {
             await logout();
-            router.reload();
+            // router.reload(); //=> with urql
+            // with apollo
+            await apollo.resetStore();
           }}
           isLoading={logoutFetching}>
           Logout
