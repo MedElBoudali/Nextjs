@@ -60,7 +60,7 @@ export type User = {
 
 export type Mutation = {
   __typename?: 'Mutation';
-  vote: Scalars['Boolean'];
+  vote: VoteResponse;
   createPost: PostResponse;
   updatePost?: Maybe<Post>;
   deletePostAndGetPost?: Maybe<Post>;
@@ -122,16 +122,22 @@ export type MutationLoginArgs = {
   userNameOrEmail: Scalars['String'];
 };
 
-export type PostResponse = {
-  __typename?: 'PostResponse';
+export type VoteResponse = {
+  __typename?: 'VoteResponse';
   error?: Maybe<ErrorField>;
-  post?: Maybe<Post>;
+  isVote?: Maybe<Scalars['Boolean']>;
 };
 
 export type ErrorField = {
   __typename?: 'ErrorField';
   field: Scalars['String'];
   message: Scalars['String'];
+};
+
+export type PostResponse = {
+  __typename?: 'PostResponse';
+  error?: Maybe<ErrorField>;
+  post?: Maybe<Post>;
 };
 
 export type PostInput = {
@@ -311,7 +317,14 @@ export type VoteMutationVariables = Exact<{
 
 export type VoteMutation = (
   { __typename?: 'Mutation' }
-  & Pick<Mutation, 'vote'>
+  & { vote: (
+    { __typename?: 'VoteResponse' }
+    & Pick<VoteResponse, 'isVote'>
+    & { error?: Maybe<(
+      { __typename?: 'ErrorField' }
+      & Pick<ErrorField, 'field' | 'message'>
+    )> }
+  ) }
 );
 
 export type MeQueryVariables = Exact<{ [key: string]: never; }>;
@@ -685,7 +698,13 @@ export type UpdatePostMutationResult = Apollo.MutationResult<UpdatePostMutation>
 export type UpdatePostMutationOptions = Apollo.BaseMutationOptions<UpdatePostMutation, UpdatePostMutationVariables>;
 export const VoteDocument = gql`
     mutation Vote($value: Int!, $postId: Int!) {
-  vote(value: $value, postId: $postId)
+  vote(value: $value, postId: $postId) {
+    error {
+      field
+      message
+    }
+    isVote
+  }
 }
     `;
 export type VoteMutationFn = Apollo.MutationFunction<VoteMutation, VoteMutationVariables>;

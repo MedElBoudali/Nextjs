@@ -16,8 +16,9 @@ const client = new ApolloClient({
             keyArgs: ['limit'],
             merge(existing: PaginatedPosts | undefined, incoming: PaginatedPosts): PaginatedPosts {
               return {
-                __typename: 'PaginatedPosts',
-                hasMore: existing?.hasMore as boolean,
+                // __typename: 'PaginatedPosts',
+                // hasMore: existing?.hasMore as boolean,
+                ...incoming,
                 posts: [...(existing?.posts || []), ...incoming.posts]
               };
             }

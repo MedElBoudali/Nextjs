@@ -27,7 +27,7 @@ const Index = () => {
     <>
       <Navbar />
       <Stack spacing='24px' m={5}>
-        {data?.getAllPosts.posts && !loading ? (
+        {data?.getAllPosts.posts ? (
           data.getAllPosts.posts.map(p =>
             !p ? null : (
               <Flex p={5} shadow='md' borderWidth='1px' key={p.id} align='center'>
