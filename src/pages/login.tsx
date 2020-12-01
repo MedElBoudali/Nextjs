@@ -4,9 +4,10 @@ import { Box, Button, Link } from '@chakra-ui/core';
 import { Formik, Form } from 'formik';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
-import { useLoginMutation } from '../generated/graphql';
+import { MeDocument, MeQuery, useLoginMutation } from '../generated/graphql';
 import { toErrorMap } from '../utils/toErrorMap';
 import Navbar from '../components/layouts/Navbar';
+import { withApollo } from '../utils/withApollo';
 
 const Login: React.FC<{}> = () => {
   const router = useRouter();
@@ -20,7 +21,19 @@ const Login: React.FC<{}> = () => {
           initialValues={{ userNameOrEmail: '', password: '' }}
           onSubmit={async (values, { setErrors }) => {
             // send values (usernam, password) to our login mutation
-            const response = await login({ variables: values });
+            const response = await login({
+              variables: values,
+              update: (cache, { data }) => {
+                cache.writeQuery<MeQuery>({
+                  query: MeDocument,
+                  data: {
+                    __typename: 'Query',
+                    me: data?.login.user
+                  }
+                });
+                cache.evict({ fieldName: 'getAllPosts:{}' });
+              }
+            });
             if (response.data?.login.errors) {
               // check if we have errors
               setErrors(toErrorMap(response.data.login.errors));
@@ -71,4 +84,4 @@ const Login: React.FC<{}> = () => {
   );
 };
 
-export default Login;
+export default withApollo({ ssr: false })(Login);

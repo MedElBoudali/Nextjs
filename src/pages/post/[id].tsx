@@ -3,6 +3,7 @@ import { useGetPostQuery } from '../../generated/graphql';
 import Navbar from '../../components/layouts/Navbar';
 import EditDeletePostBtns from '../../components/EditDeletePostBtns';
 import { Box, Flex, Heading } from '@chakra-ui/core';
+import { withApollo } from '../../utils/withApollo';
 
 const CurrentPost: React.FC<{}> = () => {
   const router = useRouter();
@@ -47,4 +48,4 @@ const CurrentPost: React.FC<{}> = () => {
   );
 };
 
-export default CurrentPost;
+export default withApollo({ ssr: true })(CurrentPost);

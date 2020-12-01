@@ -29,7 +29,12 @@ const EditDeletePostBtns: React.FC<EditDeletePostBtnsProps> = ({ postId, authorI
         size='md'
         icon='delete'
         onClick={() => {
-          deletePost({ variables: { id: postId } });
+          deletePost({
+            variables: { id: postId },
+            update: cache => {
+              cache.evict({ id: 'Post:' + postId });
+            }
+          });
           router.back();
         }}
       />

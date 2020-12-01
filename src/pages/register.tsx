@@ -4,9 +4,10 @@ import { Box, Button, Link } from '@chakra-ui/core';
 import { Formik, Form } from 'formik';
 import NextLink from 'next/link';
 import { useRouter } from 'next/router';
-import { useRegisterMutation } from '../generated/graphql';
+import { MeDocument, MeQuery, useRegisterMutation } from '../generated/graphql';
 import { toErrorMap } from '../utils/toErrorMap';
 import Navbar from '../components/layouts/Navbar';
+import { withApollo } from '../utils/withApollo';
 
 const Register: React.FC<{}> = () => {
   const router = useRouter();
@@ -20,7 +21,18 @@ const Register: React.FC<{}> = () => {
           initialValues={{ username: '', email: '', password: '' }}
           onSubmit={async (values, { setErrors }) => {
             // send values (usernam, password) to our register mutation
-            const response = await register({ variables: { userInputs: values } });
+            const response = await register({
+              variables: { userInputs: values },
+              update: (cache, { data }) => {
+                cache.writeQuery<MeQuery>({
+                  query: MeDocument,
+                  data: {
+                    __typename: 'Query',
+                    me: data?.register.user
+                  }
+                });
+              }
+            });
             if (response.data?.register.errors) {
               // check if we have errors
               setErrors(toErrorMap(response.data.register.errors));
@@ -66,4 +78,4 @@ const Register: React.FC<{}> = () => {
   );
 };
 
-export default Register;
+export default withApollo({ ssr: false })(Register);

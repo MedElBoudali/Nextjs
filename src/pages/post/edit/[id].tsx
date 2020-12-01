@@ -5,6 +5,7 @@ import InputField from '../../../components/InputField';
 import Navbar from '../../../components/layouts/Navbar';
 import Wrapper from '../../../components/Wrapper';
 import { useGetPostQuery, useUpdatePostMutation } from '../../../generated/graphql';
+import { withApollo } from '../../../utils/withApollo';
 
 const EditPost: React.FC<{}> = () => {
   const router = useRouter();
@@ -52,4 +53,4 @@ const EditPost: React.FC<{}> = () => {
   );
 };
 
-export default EditPost;
+export default withApollo({ ssr: false })(EditPost);

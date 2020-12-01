@@ -5,6 +5,7 @@ import InputField from '../components/InputField';
 import { useForgotPasswordMutation } from '../generated/graphql';
 import { useState } from 'react';
 import Navbar from '../components/layouts/Navbar';
+import { withApollo } from '../utils/withApollo';
 
 interface ForgotPAsswordProps {}
 
@@ -48,4 +49,4 @@ const ForgotPAssword: React.FC<ForgotPAsswordProps> = () => {
   );
 };
 
-export default ForgotPAssword;
+export default withApollo({ ssr: false })(ForgotPAssword);

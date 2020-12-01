@@ -5,6 +5,7 @@ import NextLink from 'next/link';
 import { Stack } from '@chakra-ui/core';
 import VoteButtons from '../components/VoteButtons';
 import EditDeletePostBtns from '../components/EditDeletePostBtns';
+import { withApollo } from '../utils/withApollo';
 
 const Index = () => {
   const { data, error, loading, fetchMore, variables } = useGetAllPostsQuery({
@@ -106,4 +107,4 @@ const Index = () => {
   );
 };
 
-export default Index;
+export default withApollo({ ssr: true })(Index);

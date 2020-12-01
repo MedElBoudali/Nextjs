@@ -8,6 +8,7 @@ import Wrapper from '../components/Wrapper';
 import { FieldError, useCreatePostMutation } from '../generated/graphql';
 import { useIsAuth } from '../hooks/useIsAuth';
 import { toErrorMap } from '../utils/toErrorMap';
+import { withApollo } from '../utils/withApollo';
 
 const CreatePost: React.FC = () => {
   useIsAuth(); // custom hook to verifie if authenticated or not
@@ -23,7 +24,10 @@ const CreatePost: React.FC = () => {
           onSubmit={async (values, { setErrors }) => {
             // send values (usernam, password) to our login mutation
             const response = await createPost({
-              variables: values
+              variables: values,
+              update: cache => {
+                cache.evict({ fieldName: 'getAllPosts:{}' });
+              }
             });
             if (response.data?.createPost.error) {
               // check if we have errors
@@ -61,4 +65,4 @@ const CreatePost: React.FC = () => {
   );
 };
 
-export default CreatePost;
+export default withApollo({ ssr: false })(CreatePost);
